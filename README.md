@@ -48,9 +48,13 @@ This is a perfect scenario for ETL.
 
 * [Generic](https://github.com/flow-php/etl-transformer)
 
+## Loaders
+
+* [Generic](https://github.com/flow-php/etl-loader)
+
 ## Adapters
 
-Adapters provides Extractors and Transformers for popular data storages or abstractions over those storages. 
+Adapter provides Extractors and Transformers for popular data storages or abstractions over those storages. 
 
 * [Memory](https://github.com/flow-php/etl-adapter-memory)
 * [Doctrine](https://github.com/flow-php/etl-adapter-doctrine)
@@ -118,8 +122,31 @@ $loader = new class implements Loader {
 
 ETL::extract($extractor)
     ->transform($transformer)
-    ->load($loader);
+    ->load($loader)
+    ->run();
 ```
+
+## Advanced Usage
+
+It's also possible to shuffle order of transformers/loaders execution.  
+
+```php
+
+ETL::extract($extractor)
+    ->transform($transformer1)
+    ->transform($transformer2)
+    ->load($loader1)
+    ->transform($transformer3)
+    ->load($loader2)
+    ->run();
+```
+
+If basic behavior is not enough, ETL [Pipeline](src/Flow/ETL/Pipeline.php) can be extended by passing
+custom implementation. 
+
+Flow ETL comes with a default pipeline: 
+
+- [SynchronousPipeline](src/Flow/ETL/SynchronousPipeline.php)
 
 ## Development
 
